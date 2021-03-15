@@ -1,17 +1,33 @@
-name: train-my-model
+name: train-test
 on: [push]
 jobs:
   run:
-     runs-on: [ubuntu-latest]
-     container: docker://dvcorg/cml-py3:latest
-     steps:
-     - uses: actions/checkout@v2
-     - name: cml_run
-       env:
-              repo_token: ${{ secrets.GITHUB_TOKEN }}
-       run: |
-              pip install -r requirements.txt
-              python train.py
-              
-              echo "Model Metrics"
-              cat metrics.txt
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cml_run
+        shell: bash
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          GDRIVE_CREDENTIALS_DATA: "ya29.a0AfH6SMBzBbqnwy0o7fiyLcRQmifhLyLiEWb_ASePBzKXEYvNy_ChqB0_ILCeZm07_oRP-uYqaBylNnFX2nQDV5SKYC__1y1_GC4QtCHR4CEgUWoiGr1qsdhLY_Q9Y6nOYe-LFXIK1PY_B7NNDqAk0mesNW8d"
+        run: |
+          # Install requirements
+          pip install -r requirements.txt
+
+          # Pull data & run-cache from Gdrive and reproduce pipeline
+          dvc pull data --run-cache
+          dvc repro
+
+          # Report metrics
+          echo "## Metrics" >> report.md
+          git fetch --prune
+          dvc metrics diff master --show-md >> report.md
+          python train.py
+
+          # Publish charts
+          echo "### Plotting training vs testing loss and accuracy" >> report.md
+          cml-publish images/loss.png --md > report.md
+          cml publish images/accuracy.png --md > report.md
+          
+            
