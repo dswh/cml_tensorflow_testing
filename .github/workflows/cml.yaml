@@ -10,7 +10,7 @@ jobs:
         shell: bash
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          GDRIVE_CREDENTIALS_DATA: "ya29.a0AfH6SMBzBbqnwy0o7fiyLcRQmifhLyLiEWb_ASePBzKXEYvNy_ChqB0_ILCeZm07_oRP-uYqaBylNnFX2nQDV5SKYC__1y1_GC4QtCHR4CEgUWoiGr1qsdhLY_Q9Y6nOYe-LFXIK1PY_B7NNDqAk0mesNW8d"
+          GDRIVE_CREDENTIALS_DATA: ya29.a0AfH6SMBzBbqnwy0o7fiyLcRQmifhLyLiEWb_ASePBzKXEYvNy_ChqB0_ILCeZm07_oRP-uYqaBylNnFX2nQDV5SKYC__1y1_GC4QtCHR4CEgUWoiGr1qsdhLY_Q9Y6nOYe-LFXIK1PY_B7NNDqAk0mesNW8d
         run: |
           # Install requirements
           pip install -r requirements.txt
